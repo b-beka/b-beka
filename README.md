@@ -43,10 +43,7 @@ Git • GitHub • VS Code • npm • Vite
 
 ## 📫 Contact Me
 
-📧 **Email:** [your.email@example.com]  
-🌐 **Portfolio:** [your-portfolio-link.com]  
-💼 **LinkedIn:** [linkedin.com/in/yourprofile]  
-🐙 **GitHub:** [github.com/yourusername]
+📧 **Email:** [tlektesbekzan777@gmail.com]
 
 ---
 
