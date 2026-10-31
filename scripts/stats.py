@@ -37,10 +37,13 @@ query($login: String!) {
 }
 """
 
-INK, INK2, INK3, MUTED = "#2c3f41", "#3d5254", "#5f7674", "#7d908e"
-BG, LINE = "#e8ecec", "#c9d1d1"
-SHADES = ["#d5dcdc", "#a9b8b6", "#7d938f", "#4f6a68", "#22383b"]
-LANG_SHADES = ["#22383b", "#40585a", "#5f7674", "#7d908e", "#98a9a7", "#b9c4c3"]
+INK, INK2, INK3, MUTED = "#e6edf3", "#c9d1d9", "#8b949e", "#8b949e"
+BG, LINE = "#0d1117", "#30363d"
+SHADES = ["#161b22", "#0d3a6b", "#1f6feb", "#58a6ff", "#a5d6ff"]
+LANG_COLORS = {"TypeScript": "#3178c6", "JavaScript": "#f1e05a", "Python": "#3572A5", "HTML": "#e34c26",
+               "CSS": "#663399", "Dart": "#00B4AB", "Shell": "#89e051", "PowerShell": "#012456",
+               "Go": "#00ADD8", "Java": "#b07219", "C++": "#f34b7d", "Vue": "#41b883"}
+FALLBACK = ["#a371f7", "#3fb950", "#d29922", "#f778ba", "#79c0ff", "#ffa657"]
 FONT = "'Segoe UI', Inter, -apple-system, Helvetica, Arial, sans-serif"
 
 
@@ -55,6 +58,10 @@ def fetch():
     if "errors" in data:
         raise SystemExit(data["errors"])
     return data["data"]["user"]
+
+
+def color(name, i):
+    return LANG_COLORS.get(name, FALLBACK[i % len(FALLBACK)])
 
 
 def streaks(days):
@@ -88,7 +95,12 @@ def render(u):
     W, H = 1280, 430
     o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="GitHub stats for {LOGIN}">',
          f'<rect width="{W}" height="{H}" rx="18" fill="{BG}" stroke="{LINE}"/>',
-         f'<style>text{{font-family:{FONT}}}</style>']
+         f'<style>text{{font-family:{FONT}}}'
+         '.t{opacity:0;animation:up .7s ease-out forwards}'
+         '.bar{transform-box:fill-box;transform-origin:left;transform:scaleX(0);animation:grow 1.2s ease-out .6s forwards}'
+         '.d{opacity:0;animation:fade .4s ease-out forwards}'
+         '@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}'
+         '@keyframes grow{to{transform:scaleX(1)}}@keyframes fade{to{opacity:1}}</style>']
 
     tiles = [
         ("contributions", cc["contributionCalendar"]["totalContributions"], "last 12 months"),
@@ -102,25 +114,27 @@ def render(u):
         x = 40 + i * tw + tw / 2
         if i:
             o.append(f'<rect x="{40 + i * tw:.0f}" y="44" width="1" height="92" fill="{LINE}"/>')
-        o.append(f'<text x="{x:.0f}" y="62" text-anchor="middle" font-size="12" letter-spacing="3" fill="{MUTED}">{escape(label.upper())}</text>')
-        o.append(f'<text x="{x:.0f}" y="108" text-anchor="middle" font-size="40" font-weight="300" fill="{INK}">{val}</text>')
-        o.append(f'<text x="{x:.0f}" y="132" text-anchor="middle" font-size="12" fill="{INK3}">{escape(sub)}</text>')
+        o.append(f'<g class="t" style="animation-delay:{0.1 + i * 0.12:.2f}s">')
+        o.append(f'<text x="{x:.0f}" y="62" text-anchor="middle" font-size="12" letter-spacing="2" fill="{MUTED}">{escape(label.upper())}</text>')
+        o.append(f'<text x="{x:.0f}" y="108" text-anchor="middle" font-size="40" font-weight="600" fill="{INK}">{val}</text>')
+        o.append(f'<text x="{x:.0f}" y="132" text-anchor="middle" font-size="12" fill="{INK3}">{escape(sub)}</text></g>')
 
     # language bar
     y = 180
     o.append(f'<text x="40" y="{y}" font-size="12" letter-spacing="3" fill="{MUTED}">LANGUAGES</text>')
-    o.append(f'<clipPath id="bar"><rect x="40" y="{y + 14}" width="{W - 80}" height="10" rx="5"/></clipPath><g clip-path="url(#bar)">')
+    o.append(f'<rect x="40" y="{y + 14}" width="{W - 80}" height="10" rx="5" fill="#21262d"/>')
+    o.append(f'<clipPath id="bar"><rect x="40" y="{y + 14}" width="{W - 80}" height="10" rx="5"/></clipPath><g clip-path="url(#bar)"><g class="bar">')
     x = 40.0
     for i, (name, size) in enumerate(top):
         w = (W - 80) * size / total
-        o.append(f'<rect x="{x:.1f}" y="{y + 14}" width="{w + 1:.1f}" height="10" fill="{LANG_SHADES[i]}"/>')
+        o.append(f'<rect x="{x:.1f}" y="{y + 14}" width="{w + 1:.1f}" height="10" fill="{color(name, i)}"/>')
         x += w
-    o.append(f'<rect x="{x:.1f}" y="{y + 14}" width="{W:.0f}" height="10" fill="{LINE}"/></g>')
+    o.append('</g></g>')
     x = 40.0
     for i, (name, size) in enumerate(top):
         label = f"{name} {100 * size / total:.1f}%"
-        o.append(f'<circle cx="{x + 5:.0f}" cy="{y + 45}" r="5" fill="{LANG_SHADES[i]}"/>')
-        o.append(f'<text x="{x + 16:.0f}" y="{y + 49}" font-size="13" fill="{INK2}">{escape(label)}</text>')
+        o.append(f'<g class="t" style="animation-delay:{0.9 + i * 0.1:.2f}s"><circle cx="{x + 5:.0f}" cy="{y + 45}" r="5" fill="{color(name, i)}"/>')
+        o.append(f'<text x="{x + 16:.0f}" y="{y + 49}" font-size="13" fill="{INK2}">{escape(label)}</text></g>')
         x += 30 + len(label) * 7.4
 
     # contribution calendar
@@ -133,7 +147,7 @@ def render(u):
             wd = dt.date.fromisoformat(d["date"]).isoweekday() % 7
             c = d["contributionCount"]
             shade = SHADES[0] if not c else SHADES[min(4, 1 + int(3.999 * c / peak))]
-            o.append(f'<rect x="{gx + wi * (cell + gap):.1f}" y="{y0 + wd * (cell + gap)}" width="{cell}" height="{cell}" rx="3" fill="{shade}"><title>{d["date"]}: {c}</title></rect>')
+            o.append(f'<rect x="{gx + wi * (cell + gap):.1f}" y="{y0 + wd * (cell + gap)}" width="{cell}" height="{cell}" rx="3" fill="{shade}" class="d" style="animation-delay:{1.2 + wi * 0.025:.3f}s"><title>{d["date"]}: {c}</title></rect>')
     o.append(f'<text x="{W - 40}" y="{H - 12}" text-anchor="end" font-size="11" fill="{MUTED}">updated {dt.date.today().isoformat()}</text>')
     o.append("</svg>")
     return "\n".join(o)

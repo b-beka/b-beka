@@ -4,123 +4,100 @@
 
 <br/>
 
-<img src="https://img.shields.io/badge/status-open_to_work-3d5254?style=flat-square" alt="Open to work"/>
-<img src="https://img.shields.io/badge/based_in-Aktobe,_KZ-5f7674?style=flat-square" alt="Aktobe, Kazakhstan"/>
-<img src="https://komarev.com/ghpvc/?username=b-beka&style=flat-square&color=7d908e&label=profile+views" alt="Profile views"/>
-
-<sub><b>EN</b> · <a href="#ru">RU ↓</a></sub>
+<a href="mailto:tlektesbekzan777@gmail.com"><img src="https://img.shields.io/badge/Email-tlektesbekzan777@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/></a>
+<a href="https://t.me/Beka2007kz"><img src="https://img.shields.io/badge/Telegram-@Beka2007kz-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"/></a>
+<img src="https://komarev.com/ghpvc/?username=b-beka&style=for-the-badge&color=58a6ff&label=PROFILE+VIEWS" alt="Profile views"/>
 
 </div>
 
-<br/>
-
-<img src="./assets/title-about.svg" alt="About me" width="100%"/>
+## 👋 About me · Обо мне
 
 <table>
 <tr>
 <td width="50%" valign="top">
 
-**🇬🇧 English**
+**English**
 
-I'm **Bekzhan** — a front-end developer and web designer from **Aktobe, Kazakhstan**, studying at **K. Zhubanov Aktobe Regional University**.
+I'm **Bekzhan**, a front-end developer and web designer from **Aktobe, Kazakhstan**, and a student at **K. Zhubanov Aktobe Regional University**.
 
-I build calm, clean and fast interfaces: from a Figma frame to a responsive, production-ready React app. I care about typography, motion and the small details that make a product feel *right*.
+I build clean, fast and responsive interfaces, from a Figma mockup to a production-ready React application.
 
-- 🌲 Crafting UI with **React, TypeScript & Tailwind**
-- 🧠 Building AI-powered EdTech products
-- 🏆 Hackathon participant & **ICPC** contestant
-- 🤝 **Open to any work:** full-time, internship, freelance, collaboration
+- 💻 Building UIs with **React, TypeScript and Tailwind CSS**
+- 🧠 Working on AI-powered EdTech products
+- 🏆 Hackathon participant and **ICPC** contestant
+- 🤝 **Open to work:** full-time, internships, freelance and collaborations
 
 </td>
 <td width="50%" valign="top">
 
-<a id="ru"></a>**🇷🇺 Русский**
+**Русский**
 
-Я **Бекжан** — фронтенд-разработчик и веб-дизайнер из **Актобе, Казахстан**, студент **Актюбинского регионального университета им. К. Жубанова**.
+Меня зовут **Бекжан**, я фронтенд-разработчик и веб-дизайнер из **Актобе (Казахстан)**, студент **Актюбинского регионального университета имени К. Жубанова**.
 
-Делаю спокойные, чистые и быстрые интерфейсы: от макета в Figma до адаптивного React-приложения, готового к продакшену. Люблю типографику, анимации и мелочи, из которых складывается ощущение качества.
+Создаю чистые, быстрые и адаптивные интерфейсы: от макета в Figma до готового React-приложения.
 
-- 🌲 Интерфейсы на **React, TypeScript и Tailwind**
-- 🧠 Делаю EdTech-продукты с искусственным интеллектом
+- 💻 Разрабатываю интерфейсы на **React, TypeScript и Tailwind CSS**
+- 🧠 Работаю над EdTech-продуктами с искусственным интеллектом
 - 🏆 Участник хакатонов и олимпиады **ICPC**
-- 🤝 **Открыт для любой работы:** штат, стажировка, фриланс, совместные проекты
+- 🤝 **Открыт к работе:** полная занятость, стажировки, фриланс и совместные проекты
 
 </td>
 </tr>
 </table>
 
-<img src="./assets/title-stack.svg" alt="Tech stack" width="100%"/>
+## 🛠 Tech stack · Технологии
 
-<div align="center">
+**Front-end**
 
-<sub>FRONT-END</sub><br/>
-<img src="https://img.shields.io/badge/HTML5-2c3f41?style=flat-square&logo=html5&logoColor=e8ecec" alt="HTML5"/> <img src="https://img.shields.io/badge/CSS3-2c3f41?style=flat-square&logo=css&logoColor=e8ecec" alt="CSS3"/> <img src="https://img.shields.io/badge/JavaScript-2c3f41?style=flat-square&logo=javascript&logoColor=e8ecec" alt="JavaScript"/> <img src="https://img.shields.io/badge/TypeScript-2c3f41?style=flat-square&logo=typescript&logoColor=e8ecec" alt="TypeScript"/> <img src="https://img.shields.io/badge/React-2c3f41?style=flat-square&logo=react&logoColor=e8ecec" alt="React"/> <img src="https://img.shields.io/badge/Next.js-2c3f41?style=flat-square&logo=nextdotjs&logoColor=e8ecec" alt="Next.js"/> <img src="https://img.shields.io/badge/Tailwind%20CSS-2c3f41?style=flat-square&logo=tailwindcss&logoColor=e8ecec" alt="Tailwind CSS"/> <img src="https://img.shields.io/badge/Framer%20Motion-2c3f41?style=flat-square&logo=framer&logoColor=e8ecec" alt="Framer Motion"/> <img src="https://img.shields.io/badge/Vite-2c3f41?style=flat-square&logo=vite&logoColor=e8ecec" alt="Vite"/>
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"/>
+<img src="https://img.shields.io/badge/CSS3-663399?style=for-the-badge&logo=css&logoColor=white" alt="CSS3"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript"/>
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
+<img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/>
+<img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js"/>
+<img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS"/>
+<img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white" alt="Framer Motion"/>
+<img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/>
 
-<sub>BACK-END &amp; TOOLING</sub><br/>
-<img src="https://img.shields.io/badge/Python-5f7674?style=flat-square&logo=python&logoColor=e8ecec" alt="Python"/> <img src="https://img.shields.io/badge/FastAPI-5f7674?style=flat-square&logo=fastapi&logoColor=e8ecec" alt="FastAPI"/> <img src="https://img.shields.io/badge/Node.js-5f7674?style=flat-square&logo=nodedotjs&logoColor=e8ecec" alt="Node.js"/> <img src="https://img.shields.io/badge/Docker-5f7674?style=flat-square&logo=docker&logoColor=e8ecec" alt="Docker"/> <img src="https://img.shields.io/badge/PWA-5f7674?style=flat-square&logo=pwa&logoColor=e8ecec" alt="PWA"/> <img src="https://img.shields.io/badge/Vitest-5f7674?style=flat-square&logo=vitest&logoColor=e8ecec" alt="Vitest"/>
+**Back-end & tools**
 
-<sub>DESIGN</sub><br/>
-<img src="https://img.shields.io/badge/Figma-7d908e?style=flat-square&logo=figma&logoColor=e8ecec" alt="Figma"/> <img src="https://img.shields.io/badge/Photoshop-7d908e?style=flat-square&logo=adobephotoshop&logoColor=e8ecec" alt="Photoshop"/> <img src="https://img.shields.io/badge/Canva-7d908e?style=flat-square&logo=canva&logoColor=e8ecec" alt="Canva"/>
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+<img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"/>
+<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js"/>
+<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
+<img src="https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest"/>
+<img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git"/>
+<img src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white" alt="pnpm"/>
 
-<sub>WORKFLOW</sub><br/>
-<img src="https://img.shields.io/badge/Git-98a9a7?style=flat-square&logo=git&logoColor=e8ecec" alt="Git"/> <img src="https://img.shields.io/badge/GitHub-98a9a7?style=flat-square&logo=github&logoColor=e8ecec" alt="GitHub"/> <img src="https://img.shields.io/badge/VS%20Code-98a9a7?style=flat-square&logo=vscodium&logoColor=e8ecec" alt="VS Code"/> <img src="https://img.shields.io/badge/npm-98a9a7?style=flat-square&logo=npm&logoColor=e8ecec" alt="npm"/> <img src="https://img.shields.io/badge/pnpm-98a9a7?style=flat-square&logo=pnpm&logoColor=e8ecec" alt="pnpm"/>
+**Design**
 
-</div>
+<img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt="Figma"/>
+<img src="https://img.shields.io/badge/Photoshop-31A8FF?style=for-the-badge&logo=adobephotoshop&logoColor=white" alt="Photoshop"/>
+<img src="https://img.shields.io/badge/Canva-00C4CC?style=for-the-badge&logo=canva&logoColor=white" alt="Canva"/>
 
-<img src="./assets/title-projects.svg" alt="Projects" width="100%"/>
+## 🚀 Projects · Проекты
 
-<div align="center">
-
-<a href="https://github.com/b-beka/fill-ai"><img src="./assets/card-fill-ai.svg" alt="Fill AI" width="49%"/></a>
-<a href="https://github.com/b-beka/Kaytadan"><img src="./assets/card-kaytadan.svg" alt="Kaytadan" width="49%"/></a>
-<a href="https://github.com/b-beka/HomePrise"><img src="./assets/card-homeprise.svg" alt="HomePrise" width="49%"/></a>
-<img src="./assets/card-qazaq-loc-qa.svg" alt="Qazaq Loc QA" width="49%"/>
-
-</div>
-
-| Project | EN | RU | Stack |
+| Project | Description | Описание | Stack |
 | :-- | :-- | :-- | :-- |
-| [**FILL AI**](https://github.com/b-beka/fill-ai) | Real-time AI copilot for online lectures: turns a live lesson into a book-style summary, quizzes and flashcards | AI-копайлот для онлайн-лекций: превращает живое занятие в конспект, задачи и карточки в реальном времени | React · TS · Tailwind · FastAPI |
-| [**Kaytadan**](https://github.com/b-beka/Kaytadan) | Offline-first flashcards with spaced repetition, installable as a PWA | Карточки для слов с интервальным повторением, работают офлайн, ставятся как PWA | React · TS · Vite · Dexie |
-| [**HomePrise**](https://github.com/b-beka/HomePrise) | Website for predicting house prices | Сайт для предсказания цен на дома | HTML · CSS · JS |
-| **Qazaq Loc QA** | Quality checks for Kazakh localization of Flutter ARB files (Decentrathon 6.0) | Контроль качества казахской локализации Flutter ARB (Decentrathon 6.0) | Python |
+| [**Fill AI**](https://github.com/b-beka/fill-ai) | Real-time AI copilot for online lectures: turns a live lesson into a summary, quizzes and flashcards | AI-помощник для онлайн-лекций: в реальном времени превращает занятие в конспект, задания и карточки | React · TypeScript · Tailwind · FastAPI |
+| [**Kaytadan**](https://github.com/b-beka/Kaytadan) | Offline-first flashcards with spaced repetition, installable as a PWA | Карточки для запоминания слов с интервальным повторением; работают офлайн и устанавливаются как PWA | React · TypeScript · Vite · Dexie |
+| [**HomePrise**](https://github.com/b-beka/HomePrise) | Website for predicting house prices | Сайт для прогнозирования цен на жильё | HTML · CSS · JavaScript |
+| **Qazaq Loc QA** | Quality checks for Kazakh localization of Flutter ARB files | Проверка качества казахской локализации Flutter-приложений (ARB) | Python |
 
-<img src="./assets/title-achievements.svg" alt="Achievements" width="100%"/>
+## 🏆 Achievements · Достижения
 
-<div align="center">
+- **Decentrathon 6.0** — hackathon participant, Qazaq Loc QA case · участник хакатона, кейс Qazaq Loc QA
+- **ICPC** — competitive programming contestant · участник олимпиады по спортивному программированию
 
-| | EN | RU |
-| :-: | :-- | :-- |
-| 🏆 | **Decentrathon 6.0** — hackathon participant (Qazaq Loc QA case) | **Decentrathon 6.0** — участник хакатона (кейс Qazaq Loc QA) |
-| 💻 | **ICPC** — competitive programming contestant | **ICPC** — участник олимпиады по спортивному программированию |
-| 🎓 | Student at K. Zhubanov Aktobe Regional University | Студент АРУ им. К. Жубанова |
-
-</div>
-
-<img src="./assets/title-stats.svg" alt="GitHub stats" width="100%"/>
-
-<div align="center">
+## 📊 GitHub stats · Статистика
 
 <img src="./assets/stats.svg" alt="GitHub stats" width="100%"/>
 
-</div>
-
-<img src="./assets/title-contact.svg" alt="Let's connect" width="100%"/>
+---
 
 <div align="center">
 
-<a href="mailto:tlektesbekzan777@gmail.com"><img src="https://img.shields.io/badge/Email-tlektesbekzan777-2c3f41?style=for-the-badge&logo=gmail&logoColor=e8ecec" alt="Email"/></a>
-<a href="https://github.com/b-beka"><img src="https://img.shields.io/badge/GitHub-b--beka-5f7674?style=for-the-badge&logo=github&logoColor=e8ecec" alt="GitHub"/></a>
-<a href="https://t.me/Beka2007kz"><img src="https://img.shields.io/badge/Telegram-@Beka2007kz-3d5254?style=for-the-badge&logo=telegram&logoColor=e8ecec" alt="Telegram"/></a>
-
-<!-- Add LinkedIn etc. here, same style:
-<a href="https://www.linkedin.com/in/USERNAME"><img src="https://img.shields.io/badge/LinkedIn-name-7d908e?style=for-the-badge&logo=linkedin&logoColor=e8ecec" alt="LinkedIn"/></a>
--->
-
-<sub>Open to job offers, internships, freelance and collaboration · Открыт к предложениям о работе, стажировкам, фрилансу и сотрудничеству</sub>
-
-<br/><br/>
-
-<img src="./assets/footer.svg" alt="Thanks for visiting" width="100%"/>
+**Open to job offers, internships, freelance and collaborations.**<br/>
+**Открыт к предложениям о работе, стажировкам, фрилансу и сотрудничеству.**
 
 </div>
