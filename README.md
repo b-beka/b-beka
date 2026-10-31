@@ -71,9 +71,10 @@ I build calm, clean and fast interfaces: from a Figma frame to a responsive, pro
 
 <div align="center">
 
-<a href="https://github.com/b-beka/fill-ai"><img src="https://github-readme-stats.vercel.app/api/pin/?username=b-beka&repo=fill-ai&bg_color=e8ecec&title_color=2c3f41&text_color=3d5254&icon_color=5f7674&border_color=c9d1d1&border_radius=12&description_lines_count=2" alt="fill-ai" width="400"/></a>
-<a href="https://github.com/b-beka/Kaytadan"><img src="https://github-readme-stats.vercel.app/api/pin/?username=b-beka&repo=Kaytadan&bg_color=e8ecec&title_color=2c3f41&text_color=3d5254&icon_color=5f7674&border_color=c9d1d1&border_radius=12&description_lines_count=2" alt="Kaytadan" width="400"/></a>
-<a href="https://github.com/b-beka/HomePrise"><img src="https://github-readme-stats.vercel.app/api/pin/?username=b-beka&repo=HomePrise&bg_color=e8ecec&title_color=2c3f41&text_color=3d5254&icon_color=5f7674&border_color=c9d1d1&border_radius=12&description_lines_count=2" alt="HomePrise" width="400"/></a>
+<a href="https://github.com/b-beka/fill-ai"><img src="./assets/card-fill-ai.svg" alt="Fill AI" width="49%"/></a>
+<a href="https://github.com/b-beka/Kaytadan"><img src="./assets/card-kaytadan.svg" alt="Kaytadan" width="49%"/></a>
+<a href="https://github.com/b-beka/HomePrise"><img src="./assets/card-homeprise.svg" alt="HomePrise" width="49%"/></a>
+<img src="./assets/card-qazaq-loc-qa.svg" alt="Qazaq Loc QA" width="49%"/>
 
 </div>
 
@@ -82,6 +83,7 @@ I build calm, clean and fast interfaces: from a Figma frame to a responsive, pro
 | [**FILL AI**](https://github.com/b-beka/fill-ai) | Real-time AI copilot for online lectures: turns a live lesson into a book-style summary, quizzes and flashcards | AI-копайлот для онлайн-лекций: превращает живое занятие в конспект, задачи и карточки в реальном времени | React · TS · Tailwind · FastAPI |
 | [**Kaytadan**](https://github.com/b-beka/Kaytadan) | Offline-first flashcards with spaced repetition, installable as a PWA | Карточки для слов с интервальным повторением, работают офлайн, ставятся как PWA | React · TS · Vite · Dexie |
 | [**HomePrise**](https://github.com/b-beka/HomePrise) | Website for predicting house prices | Сайт для предсказания цен на дома | HTML · CSS · JS |
+| **Qazaq Loc QA** | Quality checks for Kazakh localization of Flutter ARB files (Decentrathon 6.0) | Контроль качества казахской локализации Flutter ARB (Decentrathon 6.0) | Python |
 
 <img src="./assets/title-achievements.svg" alt="Achievements" width="100%"/>
 
@@ -99,10 +101,7 @@ I build calm, clean and fast interfaces: from a Figma frame to a responsive, pro
 
 <div align="center">
 
-<img src="https://github-readme-stats.vercel.app/api?username=b-beka&show_icons=true&include_all_commits=true&count_private=true&bg_color=e8ecec&title_color=2c3f41&text_color=3d5254&icon_color=5f7674&border_color=c9d1d1&border_radius=12" alt="GitHub stats" height="165"/>
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=b-beka&layout=compact&langs_count=6&bg_color=e8ecec&title_color=2c3f41&text_color=3d5254&icon_color=5f7674&border_color=c9d1d1&border_radius=12" alt="Top languages" height="165"/>
-
-<img src="https://streak-stats.demolab.com/?user=b-beka&background=e8ecec&border=c9d1d1&stroke=c9d1d1&ring=5f7674&fire=3d5254&currStreakNum=2c3f41&sideNums=2c3f41&currStreakLabel=3d5254&sideLabels=3d5254&dates=7d908e&border_radius=12" alt="GitHub streak" width="600"/>
+<img src="./assets/stats.svg" alt="GitHub stats" width="100%"/>
 
 </div>
 
@@ -112,9 +111,9 @@ I build calm, clean and fast interfaces: from a Figma frame to a responsive, pro
 
 <a href="mailto:tlektesbekzan777@gmail.com"><img src="https://img.shields.io/badge/Email-tlektesbekzan777-2c3f41?style=for-the-badge&logo=gmail&logoColor=e8ecec" alt="Email"/></a>
 <a href="https://github.com/b-beka"><img src="https://img.shields.io/badge/GitHub-b--beka-5f7674?style=for-the-badge&logo=github&logoColor=e8ecec" alt="GitHub"/></a>
+<a href="https://t.me/Beka2007kz"><img src="https://img.shields.io/badge/Telegram-@Beka2007kz-3d5254?style=for-the-badge&logo=telegram&logoColor=e8ecec" alt="Telegram"/></a>
 
-<!-- Add more contacts here, e.g.:
-<a href="https://t.me/USERNAME"><img src="https://img.shields.io/badge/Telegram-username-3d5254?style=for-the-badge&logo=telegram&logoColor=e8ecec" alt="Telegram"/></a>
+<!-- Add LinkedIn etc. here, same style:
 <a href="https://www.linkedin.com/in/USERNAME"><img src="https://img.shields.io/badge/LinkedIn-name-7d908e?style=for-the-badge&logo=linkedin&logoColor=e8ecec" alt="LinkedIn"/></a>
 -->
 
