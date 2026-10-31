@@ -60,6 +60,12 @@ def fetch():
     return data["data"]["user"]
 
 
+def fade(delay, dur=0.6):
+    total = delay + dur
+    return (f'<animate attributeName="opacity" values="0;0;1" keyTimes="0;{delay / total:.3f};1" '
+            f'dur="{total:.2f}s" fill="freeze"/>')
+
+
 def color(name, i):
     return LANG_COLORS.get(name, FALLBACK[i % len(FALLBACK)])
 
@@ -95,12 +101,7 @@ def render(u):
     W, H = 1280, 430
     o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="GitHub stats for {LOGIN}">',
          f'<rect width="{W}" height="{H}" rx="18" fill="{BG}" stroke="{LINE}"/>',
-         f'<style>text{{font-family:{FONT}}}'
-         '.t{opacity:0;animation:up .7s ease-out forwards}'
-         '.bar{transform-box:fill-box;transform-origin:left;transform:scaleX(0);animation:grow 1.2s ease-out .6s forwards}'
-         '.d{opacity:0;animation:fade .4s ease-out forwards}'
-         '@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}'
-         '@keyframes grow{to{transform:scaleX(1)}}@keyframes fade{to{opacity:1}}</style>']
+         f'<style>text{{font-family:{FONT}}}</style>']
 
     tiles = [
         ("contributions", cc["contributionCalendar"]["totalContributions"], "last 12 months"),
@@ -114,7 +115,7 @@ def render(u):
         x = 40 + i * tw + tw / 2
         if i:
             o.append(f'<rect x="{40 + i * tw:.0f}" y="44" width="1" height="92" fill="{LINE}"/>')
-        o.append(f'<g class="t" style="animation-delay:{0.1 + i * 0.12:.2f}s">')
+        o.append(f'<g>{fade(0.1 + i * 0.12)}')
         o.append(f'<text x="{x:.0f}" y="62" text-anchor="middle" font-size="12" letter-spacing="2" fill="{MUTED}">{escape(label.upper())}</text>')
         o.append(f'<text x="{x:.0f}" y="108" text-anchor="middle" font-size="40" font-weight="600" fill="{INK}">{val}</text>')
         o.append(f'<text x="{x:.0f}" y="132" text-anchor="middle" font-size="12" fill="{INK3}">{escape(sub)}</text></g>')
@@ -123,7 +124,9 @@ def render(u):
     y = 180
     o.append(f'<text x="40" y="{y}" font-size="12" letter-spacing="3" fill="{MUTED}">LANGUAGES</text>')
     o.append(f'<rect x="40" y="{y + 14}" width="{W - 80}" height="10" rx="5" fill="#21262d"/>')
-    o.append(f'<clipPath id="bar"><rect x="40" y="{y + 14}" width="{W - 80}" height="10" rx="5"/></clipPath><g clip-path="url(#bar)"><g class="bar">')
+    o.append(f'<clipPath id="bar"><rect x="40" y="{y + 14}" width="{W - 80}" height="10" rx="5"/></clipPath>'
+             f'<clipPath id="grow"><rect x="40" y="{y + 10}" height="20" width="0"><animate attributeName="width" values="0;0;{W - 80}" keyTimes="0;0.3;1" dur="2s" calcMode="spline" keySplines="0 0 1 1;0.2 0.8 0.2 1" fill="freeze"/></rect></clipPath>'
+             f'<g clip-path="url(#bar)"><g clip-path="url(#grow)">')
     x = 40.0
     for i, (name, size) in enumerate(top):
         w = (W - 80) * size / total
@@ -133,7 +136,7 @@ def render(u):
     x = 40.0
     for i, (name, size) in enumerate(top):
         label = f"{name} {100 * size / total:.1f}%"
-        o.append(f'<g class="t" style="animation-delay:{0.9 + i * 0.1:.2f}s"><circle cx="{x + 5:.0f}" cy="{y + 45}" r="5" fill="{color(name, i)}"/>')
+        o.append(f'<g>{fade(0.9 + i * 0.1)}<circle cx="{x + 5:.0f}" cy="{y + 45}" r="5" fill="{color(name, i)}"/>')
         o.append(f'<text x="{x + 16:.0f}" y="{y + 49}" font-size="13" fill="{INK2}">{escape(label)}</text></g>')
         x += 30 + len(label) * 7.4
 
@@ -147,7 +150,7 @@ def render(u):
             wd = dt.date.fromisoformat(d["date"]).isoweekday() % 7
             c = d["contributionCount"]
             shade = SHADES[0] if not c else SHADES[min(4, 1 + int(3.999 * c / peak))]
-            o.append(f'<rect x="{gx + wi * (cell + gap):.1f}" y="{y0 + wd * (cell + gap)}" width="{cell}" height="{cell}" rx="3" fill="{shade}" class="d" style="animation-delay:{1.2 + wi * 0.025:.3f}s"><title>{d["date"]}: {c}</title></rect>')
+            o.append(f'<rect x="{gx + wi * (cell + gap):.1f}" y="{y0 + wd * (cell + gap)}" width="{cell}" height="{cell}" rx="3" fill="{shade}">{fade(1.2 + wi * 0.025, 0.4)}<title>{d["date"]}: {c}</title></rect>')
     o.append(f'<text x="{W - 40}" y="{H - 12}" text-anchor="end" font-size="11" fill="{MUTED}">updated {dt.date.today().isoformat()}</text>')
     o.append("</svg>")
     return "\n".join(o)

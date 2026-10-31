@@ -61,6 +61,15 @@ def blobs():
     return "\n".join(out)
 
 
+def appear(delay, dur=0.8, dy=14):
+    """SMIL fade+slide in; element is hidden from t=0 until it appears."""
+    total = delay + dur
+    k = delay / total
+    return (f'<animate attributeName="opacity" values="0;0;1" keyTimes="0;{k:.3f};1" dur="{total:.2f}s" fill="freeze"/>'
+            f'<animateTransform attributeName="transform" type="translate" values="0 {dy};0 {dy};0 0" keyTimes="0;{k:.3f};1" '
+            f'calcMode="spline" keySplines="0 0 1 1;0.2 0.8 0.2 1" dur="{total:.2f}s" fill="freeze"/>')
+
+
 def code_window():
     x, y = 860, 70
     lines = [
@@ -72,12 +81,12 @@ def code_window():
         ("};", 0),
     ]
     out = [
-        f'<g class="win"><rect x="{x}" y="{y}" width="340" height="190" rx="12" fill="#161b22" fill-opacity="0.85" stroke="#30363d"/>',
+        f'<g>{appear(0.2, 1.0)}<rect x="{x}" y="{y}" width="340" height="190" rx="12" fill="#161b22" fill-opacity="0.85" stroke="#30363d"/>',
         *[f'<circle cx="{x + 20 + i * 16}" cy="{y + 18}" r="5" fill="{c}"/>' for i, c in enumerate(["#ff5f57", "#febc2e", "#28c840"])],
     ]
     for i, (t, ind) in enumerate(lines):
         out.append(
-            f'<text x="{x + 20 + ind * 18}" y="{y + 54 + i * 22}" class="code" style="animation-delay:{0.6 + i * 0.25:.2f}s">{t}</text>'
+            f'<g>{appear(0.8 + i * 0.25, 0.4, 0)}<text x="{x + 20 + ind * 18}" y="{y + 54 + i * 22}" class="code">{t}</text></g>'
         )
     out.append("</g>")
     return "\n".join(out)
@@ -96,24 +105,20 @@ svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{
 .hi{{font:500 20px {SANS};fill:#8b949e;letter-spacing:1px}}
 .role{{font:500 {ROLE_SIZE}px {MONO};fill:#79c0ff}}
 .meta{{font:400 16px {SANS};fill:#8b949e}}
-.code{{font:400 14px {MONO};fill:#c9d1d9;opacity:0;animation:fade .5s ease-out forwards}}
-.up{{animation:up .8s ease-out both}}
-.win{{animation:up 1s ease-out both;animation-delay:.2s}}
-@keyframes up{{from{{opacity:0;transform:translateY(14px)}}to{{opacity:1;transform:none}}}}
-@keyframes fade{{to{{opacity:1}}}}
+.code{{font:400 14px {MONO};fill:#c9d1d9}}
 </style>
 </defs>
 <g clip-path="url(#r)">
 <rect width="{W}" height="{H}" fill="url(#bg)"/>
 <rect width="{W}" height="{H}" fill="url(#grid)" opacity="0.6"/>
 {blobs()}
-<g class="up">
+<g>{appear(0)}
 <text x="{X0}" y="96" class="hi">HI THERE, I'M</text>
 <text x="{X0 - 3}" y="160" class="name">{NAME}</text>
 <rect x="{X0}" y="176" width="120" height="4" rx="2" fill="url(#accent)"/>
 </g>
 {typing()}
-<g class="up" style="animation-delay:.4s">
+<g>{appear(0.4)}
 <circle cx="{X0 + 6}" cy="262" r="5" fill="#3fb950"><animate attributeName="r" values="5;7;5" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;.5;1" dur="1.6s" repeatCount="indefinite"/></circle>
 <text x="{X0 + 20}" y="268" class="meta">Available for work  ·  Aktobe, Kazakhstan  ·  K. Zhubanov University</text>
 </g>
