@@ -95,7 +95,7 @@ def render(u):
         ("commits", cc["totalCommitContributions"] + cc["restrictedContributionsCount"], "incl. private"),
         ("pull requests", cc["totalPullRequestContributions"], "last 12 months"),
         ("current streak", current, f"longest · {longest} days"),
-        ("repositories", u["repositories"]["totalCount"], f"{stars} stars · {u['followers']['totalCount']} followers"),
+        ("repositories", u["repositories"]["totalCount"], f"{stars} star{'' if stars == 1 else 's'} · {u['followers']['totalCount']} follower{'' if u['followers']['totalCount'] == 1 else 's'}"),
     ]
     tw = (W - 80) / len(tiles)
     for i, (label, val, sub) in enumerate(tiles):
