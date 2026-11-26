@@ -39,11 +39,9 @@ query($login: String!) {
 
 INK, INK2, INK3, MUTED = "#e6edf3", "#c9d1d9", "#8b949e", "#8b949e"
 BG, LINE = "#0d1117", "#30363d"
-SHADES = ["#161b22", "#0d3a6b", "#1f6feb", "#58a6ff", "#a5d6ff"]
-LANG_COLORS = {"TypeScript": "#3178c6", "JavaScript": "#f1e05a", "Python": "#3572A5", "HTML": "#e34c26",
-               "CSS": "#663399", "Dart": "#00B4AB", "Shell": "#89e051", "PowerShell": "#012456",
-               "Go": "#00ADD8", "Java": "#b07219", "C++": "#f34b7d", "Vue": "#41b883"}
-FALLBACK = ["#a371f7", "#3fb950", "#d29922", "#f778ba", "#79c0ff", "#ffa657"]
+# Calendar levels and language segments run from blue to violet, matching the other profile graphics.
+SHADES = ["#161b22", "#1f3b70", "#3d6fe0", "#7d8cf8", "#a371f7"]
+LANG_SHADES = ["#58a6ff", "#6e9cfb", "#8492f8", "#9a87f6", "#a371f7", "#c0a3fa"]
 FONT = "'Segoe UI', Inter, -apple-system, Helvetica, Arial, sans-serif"
 
 
@@ -67,7 +65,7 @@ def fade(delay, dur=0.6):
 
 
 def color(name, i):
-    return LANG_COLORS.get(name, FALLBACK[i % len(FALLBACK)])
+    return LANG_SHADES[i % len(LANG_SHADES)]
 
 
 def streaks(days):
@@ -100,7 +98,13 @@ def render(u):
 
     W, H = 1280, 430
     o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="GitHub stats for {LOGIN}">',
-         f'<rect width="{W}" height="{H}" rx="18" fill="{BG}" stroke="{LINE}"/>',
+         '<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#58a6ff"/>'
+         '<stop offset="0.5" stop-color="#a371f7"/><stop offset="1" stop-color="#58a6ff"/>'
+         '<animate attributeName="x1" values="0;-1;0" dur="6s" repeatCount="indefinite"/>'
+         '<animate attributeName="x2" values="1;0;1" dur="6s" repeatCount="indefinite"/></linearGradient></defs>',
+         f'<rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="18" fill="{BG}" stroke="url(#g)" stroke-opacity="0.6"/>',
+         f'<clipPath id="cardclip"><rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="18"/></clipPath>',
+         f'<rect x="0" y="0" width="{W}" height="5" fill="url(#g)" clip-path="url(#cardclip)"/>',
          f'<style>text{{font-family:{FONT}}}</style>']
 
     tiles = [
@@ -117,7 +121,7 @@ def render(u):
             o.append(f'<rect x="{40 + i * tw:.0f}" y="44" width="1" height="92" fill="{LINE}"/>')
         o.append(f'<g>{fade(0.1 + i * 0.12)}')
         o.append(f'<text x="{x:.0f}" y="62" text-anchor="middle" font-size="12" letter-spacing="2" fill="{MUTED}">{escape(label.upper())}</text>')
-        o.append(f'<text x="{x:.0f}" y="108" text-anchor="middle" font-size="40" font-weight="600" fill="{INK}">{val}</text>')
+        o.append(f'<text x="{x:.0f}" y="108" text-anchor="middle" font-size="40" font-weight="700" fill="url(#g)">{val}</text>')
         o.append(f'<text x="{x:.0f}" y="132" text-anchor="middle" font-size="12" fill="{INK3}">{escape(sub)}</text></g>')
 
     # language bar
