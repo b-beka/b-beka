@@ -1,4 +1,4 @@
-"""Render assets/stats.svg (misty-forest style) from the GitHub GraphQL API.
+"""Render assets/stats.svg from the GitHub GraphQL API.
 
 Run by .github/workflows/stats.yml with GITHUB_TOKEN. Standard library only.
 """
@@ -37,11 +37,13 @@ query($login: String!) {
 }
 """
 
-INK, INK2, INK3, MUTED = "#e6edf3", "#c9d1d9", "#8b949e", "#8b949e"
-BG, LINE = "#0d1117", "#30363d"
-# Calendar levels and language segments run from blue to violet, matching the other profile graphics.
-SHADES = ["#161b22", "#1f3b70", "#3d6fe0", "#7d8cf8", "#a371f7"]
-LANG_SHADES = ["#58a6ff", "#6e9cfb", "#8492f8", "#9a87f6", "#a371f7", "#c0a3fa"]
+# Palette taken from the profile banner: sky blue, cloud white and field green.
+INK, INK2, INK3, MUTED = "#1f2f3a", "#33454f", "#5e6b72", "#6f7c82"
+BG, LINE, TRACK = "#f7f6ef", "#dcdccd", "#e6e6da"
+SKY, GRASS = "#3c688a", "#3f7a2a"
+# Contribution levels go from cloud to field green; languages go from sky to field.
+SHADES = ["#e6e6da", "#c6d9ad", "#93bd70", "#5c9443", "#2f6b1e"]
+LANG_SHADES = ["#3c688a", "#3e7280", "#417c70", "#457a55", "#3f7a2a", "#76995c"]
 FONT = "'Segoe UI', Inter, -apple-system, Helvetica, Arial, sans-serif"
 
 
@@ -98,13 +100,11 @@ def render(u):
 
     W, H = 1280, 430
     o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="GitHub stats for {LOGIN}">',
-         '<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#58a6ff"/>'
-         '<stop offset="0.5" stop-color="#a371f7"/><stop offset="1" stop-color="#58a6ff"/>'
-         '<animate attributeName="x1" values="0;-1;0" dur="6s" repeatCount="indefinite"/>'
-         '<animate attributeName="x2" values="1;0;1" dur="6s" repeatCount="indefinite"/></linearGradient></defs>',
-         f'<rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="18" fill="{BG}" stroke="url(#g)" stroke-opacity="0.6"/>',
+         f'<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="{SKY}"/>'
+         f'<stop offset="1" stop-color="{GRASS}"/></linearGradient></defs>',
+         f'<rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="18" fill="{BG}" stroke="{LINE}"/>',
          f'<clipPath id="cardclip"><rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="18"/></clipPath>',
-         f'<rect x="0" y="0" width="{W}" height="5" fill="url(#g)" clip-path="url(#cardclip)"/>',
+         f'<rect x="0" y="0" width="{W}" height="4" fill="url(#g)" clip-path="url(#cardclip)"/>',
          f'<style>text{{font-family:{FONT}}}</style>']
 
     tiles = [
@@ -121,13 +121,13 @@ def render(u):
             o.append(f'<rect x="{40 + i * tw:.0f}" y="44" width="1" height="92" fill="{LINE}"/>')
         o.append(f'<g>{fade(0.1 + i * 0.12)}')
         o.append(f'<text x="{x:.0f}" y="62" text-anchor="middle" font-size="12" letter-spacing="2" fill="{MUTED}">{escape(label.upper())}</text>')
-        o.append(f'<text x="{x:.0f}" y="108" text-anchor="middle" font-size="40" font-weight="700" fill="url(#g)">{val}</text>')
+        o.append(f'<text x="{x:.0f}" y="108" text-anchor="middle" font-size="38" font-weight="600" fill="{INK}">{val}</text>')
         o.append(f'<text x="{x:.0f}" y="132" text-anchor="middle" font-size="12" fill="{INK3}">{escape(sub)}</text></g>')
 
     # language bar
     y = 180
     o.append(f'<text x="40" y="{y}" font-size="12" letter-spacing="3" fill="{MUTED}">LANGUAGES</text>')
-    o.append(f'<rect x="40" y="{y + 14}" width="{W - 80}" height="10" rx="5" fill="#21262d"/>')
+    o.append(f'<rect x="40" y="{y + 14}" width="{W - 80}" height="10" rx="5" fill="{TRACK}"/>')
     o.append(f'<clipPath id="bar"><rect x="40" y="{y + 14}" width="{W - 80}" height="10" rx="5"/></clipPath>'
              f'<clipPath id="grow"><rect x="40" y="{y + 10}" height="20" width="0"><animate attributeName="width" values="0;0;{W - 80}" keyTimes="0;0.3;1" dur="2s" calcMode="spline" keySplines="0 0 1 1;0.2 0.8 0.2 1" fill="freeze"/></rect></clipPath>'
              f'<g clip-path="url(#bar)"><g clip-path="url(#grow)">')
