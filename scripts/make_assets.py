@@ -1,29 +1,40 @@
 """Render the profile graphics into assets/.
 
-Palette comes from the banner photo (assets/banner.jpg): sky blue, cloud white and
-field green. The sky-to-field gradient is used only for thin accents.
-Animations use SMIL and play once (GitHub does not run CSS animations in README images).
-Run: python scripts/make_assets.py
+Black-and-white, minimal. Effects: liquid fill of the name, line drawing, soft
+shadows, paper grain and a drifting ASCII/Unicode cloud with Matrix-style
+flicker and rain. Animations use SMIL (GitHub does not run CSS animations in
+README images). Run: python scripts/make_assets.py
 """
 import base64
+import math
 import os
+import random
 from xml.sax.saxutils import escape
 
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets")
 
-SKY, GRASS = "#3c688a", "#3f7a2a"
-CLOUD, CLOUD_LINE = "#f7f6ef", "#dcdccd"
-INK, INK_SOFT, MUTED = "#1f2f3a", "#33454f", "#5e6b72"
-NEUTRAL = "#7a8a94"  # readable on both GitHub light and dark backgrounds
-SANS = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, 'Noto Sans', Helvetica, Arial, sans-serif"
+INK, INK_2, MUTED, FAINT = "#0f0f0f", "#3a3a3a", "#8a8a8a", "#c9c9c9"
+PAPER, LINE = "#ffffff", "#ebebeb"
+NEUTRAL = "#8a8a8a"  # readable on both GitHub light and dark backgrounds
+SANS = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
 MONO = "'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace"
+GLYPHS = "01:+*·°%#@=アカサタナハマヤラワ"
 
-GRADIENT = (f'<linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="{SKY}"/>'
-            f'<stop offset="1" stop-color="{GRASS}"/></linearGradient>')
+COMMON_DEFS = f'''
+<filter id="grain" x="0" y="0" width="100%" height="100%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+  <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.022 0"/>
+</filter>
+<filter id="shadow" x="-10%" y="-20%" width="120%" height="150%"><feGaussianBlur stdDeviation="10"/></filter>'''
+
+
+def text(x, y, s, size, fill, weight=400, anchor="start", family=SANS, spacing=0, extra=""):
+    ls = f";letter-spacing:{spacing}px" if spacing else ""
+    return (f'<text x="{x}" y="{y}" text-anchor="{anchor}" fill="{fill}" {extra}'
+            f'style="font:{weight} {size}px {family}{ls}">{escape(s)}</text>')
 
 
 def appear(delay=0.0, dur=0.7, dy=10):
-    """Fade and slide in once."""
     total = delay + dur
     k = delay / total
     return (f'<animate attributeName="opacity" values="0;0;1" keyTimes="0;{k:.3f};1" dur="{total:.2f}s" fill="freeze"/>'
@@ -31,21 +42,36 @@ def appear(delay=0.0, dur=0.7, dy=10):
             f'keyTimes="0;{k:.3f};1" calcMode="spline" keySplines="0 0 1 1;0.2 0.8 0.2 1" dur="{total:.2f}s" fill="freeze"/>')
 
 
-def text(x, y, s, size, fill, weight=400, anchor="start", family=SANS, spacing=0):
-    ls = f";letter-spacing:{spacing}px" if spacing else ""
-    return (f'<text x="{x}" y="{y}" text-anchor="{anchor}" fill="{fill}" '
-            f'style="font:{weight} {size}px {family}{ls}">{escape(s)}</text>')
+def draw(delay=0.0, dur=1.4):
+    """Stroke draw-on for shapes with pathLength="1"."""
+    return (f'<animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;{delay / (delay + dur):.3f};1" '
+            f'dur="{delay + dur:.2f}s" calcMode="spline" keySplines="0 0 1 1;0.4 0 0.2 1" fill="freeze"/>')
+
+
+def card_shell(x, y, w, h, r=18, delay=0.0):
+    """White card with soft shadow, grain and a border that draws itself."""
+    return f'''<rect x="{x}" y="{y + 8}" width="{w}" height="{h}" rx="{r}" fill="#000" opacity="0.06" filter="url(#shadow)"/>
+<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="{PAPER}"/>
+<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="none" stroke="{LINE}"/>
+<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="none" stroke="{FAINT}" stroke-width="1"
+ pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">{draw(delay, 1.6)}
+<animate attributeName="stroke-opacity" values="1;1;0" keyTimes="0;0.6;1" begin="{delay + 1.6:.2f}s" dur="1.2s" fill="freeze"/></rect>'''
+
+
+def grain(x, y, w, h, r):
+    """Paper grain laid over the whole card, including photos."""
+    return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="#fff" filter="url(#grain)"/>'
 
 
 def svg(w, h, label, body, defs=""):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" '
-            f'role="img" aria-label="{escape(label)}"><defs>{GRADIENT}{defs}</defs>{body}</svg>')
+            f'role="img" aria-label="{escape(label)}"><defs>{COMMON_DEFS}{defs}</defs>{body}</svg>')
 
 
 def write(name, content):
     with open(os.path.join(ASSETS, name), "w") as f:
         f.write(content)
-    print("wrote", name)
+    print(f"wrote {name} ({len(content) // 1024} KB)")
 
 
 def data_uri(name):
@@ -53,38 +79,104 @@ def data_uri(name):
         return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
 
 
-# ---------------------------------------------------------------- header: photo + profile card
+# ---------------------------------------------------------------- ASCII cloud
+def ascii_cloud(cx, cy, seed=3):
+    """A cloud made of flickering glyphs, drifting sideways, with glyph rain underneath."""
+    rnd = random.Random(seed)
+    puffs = [(-110, 10, 70, 38), (-40, -18, 82, 52), (45, -8, 74, 46), (120, 12, 60, 34), (0, 22, 150, 30)]
+    cw, ch = 10, 13
+    cells = []
+    for gy in range(-78, 56, ch):
+        for gx in range(-200, 200, cw):
+            d = min(((gx - px) / rx) ** 2 + ((gy - py) / ry) ** 2 for px, py, rx, ry in puffs)
+            if d < 1:
+                cells.append((gx, gy, d))
+    out = []
+    for gx, gy, d in cells:
+        shade = INK_2 if d < 0.3 else (MUTED if d < 0.65 else FAINT)
+        g1, g2, g3 = rnd.sample(GLYPHS, 3)
+        dur = rnd.uniform(1.6, 4.2)
+        off = rnd.uniform(0, dur)
+        x, y = cx + gx, cy + gy
+        out.append(
+            f'<g fill="{shade}">'
+            f'<text x="{x}" y="{y}">{escape(g1)}<animate attributeName="opacity" values="1;0;0;1" keyTimes="0;0.33;0.99;1" '
+            f'calcMode="discrete" dur="{dur:.2f}s" begin="-{off:.2f}s" repeatCount="indefinite"/></text>'
+            f'<text x="{x}" y="{y}" opacity="0">{escape(g2)}<animate attributeName="opacity" values="0;1;0;0" keyTimes="0;0.33;0.66;1" '
+            f'calcMode="discrete" dur="{dur:.2f}s" begin="-{off:.2f}s" repeatCount="indefinite"/></text>'
+            f'<text x="{x}" y="{y}" opacity="0">{escape(g3)}<animate attributeName="opacity" values="0;0;1;0" keyTimes="0;0.66;0.99;1" '
+            f'calcMode="discrete" dur="{dur:.2f}s" begin="-{off:.2f}s" repeatCount="indefinite"/></text></g>')
+    # glyph rain
+    for i in range(14):
+        x = cx + rnd.randrange(-130, 130, cw)
+        dur = rnd.uniform(1.8, 3.2)
+        begin = rnd.uniform(0, 3)
+        col = "".join(f'<tspan x="{x}" dy="{ch if k else 0}">{escape(rnd.choice(GLYPHS))}</tspan>' for k in range(3))
+        out.append(
+            f'<text y="{cy + 40}" fill="{MUTED}" opacity="0">{col}'
+            f'<animateTransform attributeName="transform" type="translate" values="0 0;0 120" dur="{dur:.2f}s" '
+            f'begin="{begin:.2f}s" repeatCount="indefinite"/>'
+            f'<animate attributeName="opacity" values="0;0.8;0" dur="{dur:.2f}s" begin="{begin:.2f}s" repeatCount="indefinite"/></text>')
+    return (f'<g style="font:500 12px {MONO}">'
+            f'<animateTransform attributeName="transform" type="translate" values="-60 0;60 -6;-60 0" dur="18s" '
+            f'calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" repeatCount="indefinite"/>'
+            + "".join(out) + "</g>")
+
+
+# ---------------------------------------------------------------- header
 def header():
-    W, PH = 1280, 360            # photo height matches banner.jpg aspect (2400x674)
-    CX, CY, CW, CH = 48, 268, 760, 168
-    H = CY + CH + 14
-    card = f'''<g>{appear(0.3, 0.8, 14)}
-<rect x="{CX}" y="{CY + 6}" width="{CW}" height="{CH}" rx="14" fill="{INK}" opacity="0.12" filter="url(#shadow)"/>
-<rect x="{CX}" y="{CY}" width="{CW}" height="{CH}" rx="14" fill="{CLOUD}" stroke="{CLOUD_LINE}"/>
-{text(CX + 36, CY + 64, "Bekzhan", 44, INK, 700)}
-{text(CX + 36, CY + 98, "Front-End Developer  ·  Web Designer", 18, INK_SOFT, 500)}
-<rect x="{CX + 36}" y="{CY + 116}" height="3" rx="1.5" fill="url(#g)" width="0">
-<animate attributeName="width" values="0;0;120" keyTimes="0;0.5;1" dur="1.6s" calcMode="spline" keySplines="0 0 1 1;0.2 0.8 0.2 1" fill="freeze"/></rect>
-<circle cx="{CX + 42}" cy="{CY + 142}" r="4.5" fill="{GRASS}"/>
-{text(CX + 54, CY + 147, "Open to work  ·  Aktobe, Kazakhstan  ·  K. Zhubanov Aktobe Regional University", 14, MUTED)}
-</g>'''
-    body = (f'<image x="0" y="0" width="{W}" height="{PH}" preserveAspectRatio="xMidYMid slice" '
-            f'clip-path="url(#photo)" href="{data_uri("banner.jpg")}"/>\n{card}')
-    defs = (f'<clipPath id="photo"><rect width="{W}" height="{PH}" rx="16"/></clipPath>'
-            f'<filter id="shadow" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur stdDeviation="8"/></filter>')
-    write("header.svg", svg(W, H, "Bekzhan, Front-End Developer and Web Designer, Aktobe, Kazakhstan", body, defs))
+    W, H, M = 1280, 440, 16
+    CW, CH = W - 2 * M, H - 2 * M - 8
+    NX, NY, NS = M + 72, M + 196, 112
+
+    # liquid fill: a wave that rises behind the name, clipped to the letters
+    wave_w = 240
+    wave = "M0 0 " + " ".join(
+        f"Q{x + wave_w / 4:.0f} {-12 if (x // (wave_w // 2)) % 2 == 0 else 12} {x + wave_w / 2:.0f} 0"
+        for x in range(0, 2400, wave_w // 2)) + " V300 H0 Z"
+    fill = f'''<clipPath id="name"><text x="{NX}" y="{NY}" style="font:800 {NS}px {SANS};letter-spacing:-4px">Bekzhan</text></clipPath>
+<g clip-path="url(#name)">
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 {NY + 20};0 {NY + 20};0 {NY - NS - 30}"
+      keyTimes="0;0.25;1" dur="3.4s" calcMode="spline" keySplines="0 0 1 1;0.45 0 0.25 1" fill="freeze"/>
+    <path d="{wave}" fill="{INK}">
+      <animateTransform attributeName="transform" type="translate" values="0 0;-{wave_w} 0" dur="1.6s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</g>
+<text x="{NX}" y="{NY}" fill="none" stroke="{INK}" stroke-width="1.2" style="font:800 {NS}px {SANS};letter-spacing:-4px">Bekzhan</text>'''
+
+    body = f'''{card_shell(M, M, CW, CH, 22)}
+<clipPath id="card"><rect x="{M}" y="{M}" width="{CW}" height="{CH}" rx="22"/></clipPath>
+<g clip-path="url(#card)">
+  <image x="{W - 900}" y="{M}" width="900" height="165" preserveAspectRatio="xMaxYMin slice" href="{data_uri('clouds.jpg')}">
+    <animateTransform attributeName="transform" type="translate" values="0 0;-24 0;0 0" dur="30s" repeatCount="indefinite"/>
+  </image>
+  {ascii_cloud(W - 300, M + 150)}
+</g>
+<g>{appear(0.1)}{text(NX + 4, M + 70, "FRONT-END DEVELOPER  /  WEB DESIGNER", 13, MUTED, 600, spacing=3)}</g>
+{fill}
+<path d="M{NX + 4} {NY + 46} H{NX + 560}" stroke="{INK}" stroke-width="1" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">{draw(1.6, 1.4)}</path>
+<g>{appear(2.4)}
+  <circle cx="{NX + 9}" cy="{NY + 84}" r="4" fill="{INK}"><animate attributeName="opacity" values="1;0.25;1" dur="2.4s" repeatCount="indefinite"/></circle>
+  {text(NX + 24, NY + 89, "Open to work", 15, INK, 500)}
+  {text(NX + 140, NY + 89, "Aktobe, Kazakhstan", 15, MUTED)}
+  {text(NX + 300, NY + 89, "K. Zhubanov Aktobe Regional University", 15, MUTED)}
+</g>
+<g>{appear(2.8)}{text(W - M - 40, H - M - 38, "2026", 13, FAINT, 500, "end", MONO, 2)}</g>
+{grain(M, M, CW, CH, 22)}'''
+    write("header.svg", svg(W, H, "Bekzhan, Front-End Developer and Web Designer, Aktobe, Kazakhstan", body))
 
 
-# ---------------------------------------------------------------- section titles (centred label between two lines)
-def title(slug, label):
-    W, H = 1280, 56
-    half = len(label) * 6.2 + 28
-    body = f'''<rect x="{W / 2 - half - 340:.0f}" y="31" width="340" height="1.5" fill="url(#l)"/>
-<rect x="{W / 2 + half:.0f}" y="31" width="340" height="1.5" fill="url(#r)"/>
-{text(W / 2, 37, label.upper(), 15, NEUTRAL, 600, "middle", spacing=4)}'''
-    defs = (f'<linearGradient id="l" x1="0" x2="1"><stop offset="0" stop-color="{SKY}" stop-opacity="0"/><stop offset="1" stop-color="{SKY}"/></linearGradient>'
-            f'<linearGradient id="r" x1="1" x2="0"><stop offset="0" stop-color="{GRASS}" stop-opacity="0"/><stop offset="1" stop-color="{GRASS}"/></linearGradient>')
-    write(f"title-{slug}.svg", svg(W, H, label, body, defs))
+# ---------------------------------------------------------------- section titles: "01  About  ————"
+def title(n, slug, label):
+    W, H = 1280, 60
+    lx = 54 + len(label) * 11.5 + 24
+    body = f'''<g>{appear(0, 0.6, 6)}
+{text(0, 38, f"{n:02d}", 13, NEUTRAL, 500, family=MONO, spacing=1)}
+{text(40, 38, label, 22, NEUTRAL, 600, spacing=-0.3)}</g>
+<path d="M{lx:.0f} 32 H{W}" stroke="{NEUTRAL}" stroke-opacity="0.45" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">{draw(0.2, 1.6)}</path>'''
+    write(f"title-{slug}.svg", svg(W, H, label, body))
 
 
 # ---------------------------------------------------------------- project cards
@@ -104,40 +196,45 @@ PROJECTS = [
 ]
 
 
-def card(slug, name, desc, tags, link, i):
-    W, H = 620, 200
-    lines = "".join(text(32, 98 + n * 24, l, 15.5, INK_SOFT) for n, l in enumerate(desc))
-    x, chips = 32, []
-    for t in tags:
-        w = len(t) * 7.4 + 22
-        chips.append(f'<rect x="{x:.0f}" y="150" width="{w:.0f}" height="26" rx="6" fill="#ecebe0"/>'
-                     + text(x + w / 2, 167.5, t, 12.5, SKY, 500, "middle", MONO))
-        x += w + 8
-    body = f'''<g>{appear(0.1 + i * 0.12)}
-<rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="14" fill="{CLOUD}" stroke="{CLOUD_LINE}"/>
-<rect x="0" y="0" width="{W}" height="4" fill="url(#g)" clip-path="url(#c)"/>
-{text(32, 58, name, 24, INK, 700)}
-{text(W - 32, 56, link, 12.5, MUTED, 400, "end", MONO)}
-{lines}{"".join(chips)}
-</g>'''
-    write(f"card-{slug}.svg", svg(W, H, f"{name}: {' '.join(desc)}", body,
-                                  f'<clipPath id="c"><rect width="{W}" height="{H}" rx="14"/></clipPath>'))
+def card(i, slug, name, desc, tags, link):
+    W, H, M = 640, 236, 12
+    x0, y0 = M + 32, M + 30
+    lines = "".join(text(x0, y0 + 84 + n * 24, l, 15.5, INK_2) for n, l in enumerate(desc))
+    arrow = "" if link.startswith("private") else (
+        f'<path d="M{W - M - 44} {y0 + 6} l10 -10 M{W - M - 43} {y0 - 4} h9 v9" fill="none" stroke="{INK}" stroke-width="1.3"/>')
+    body = f'''{card_shell(M, M, W - 2 * M, H - 2 * M - 8, 18, 0.1 + i * 0.15)}
+<g>{appear(0.3 + i * 0.15)}
+{text(x0, y0 + 6, f"{i + 1:02d}", 12.5, MUTED, 500, family=MONO, spacing=1)}
+{text(x0, y0 + 48, name, 26, INK, 700, spacing=-0.5)}
+{arrow}
+{lines}
+{text(x0, H - M - 42, "  /  ".join(tags), 12.5, MUTED, 500, family=MONO, extra='xml:space="preserve" ')}
+{text(W - M - (52 if arrow else 32), y0 + 6, link, 12.5, MUTED if arrow else FAINT, 400, "end", MONO)}
+</g>
+{grain(M, M, W - 2 * M, H - 2 * M - 8, 18)}'''
+    write(f"card-{slug}.svg", svg(W, H, f"{name}: {' '.join(desc)}", body))
 
 
-# ---------------------------------------------------------------- footer: field strip from the photo
+# ---------------------------------------------------------------- footer
 def footer():
-    W, H = 1280, 147  # footer.jpg is 2400x276
-    body = (f'<image width="{W}" height="{H}" preserveAspectRatio="xMidYMid slice" clip-path="url(#f)" '
-            f'href="{data_uri("footer.jpg")}"/>')
-    write("footer.svg", svg(W, H, "Green field under a cloudy sky", body,
-                            f'<clipPath id="f"><rect width="{W}" height="{H}" rx="16"/></clipPath>'))
+    W, H, M = 1280, 230, 16
+    CW, CH = W - 2 * M, H - 2 * M - 8
+    body = f'''{card_shell(M, M, CW, CH, 22)}
+<clipPath id="card"><rect x="{M}" y="{M}" width="{CW}" height="{CH}" rx="22"/></clipPath>
+<g clip-path="url(#card)">{ascii_cloud(280, M + 96, seed=9)}</g>
+<g>{appear(0.2)}
+{text(W - M - 64, M + 90, "Thanks for stopping by.", 28, INK, 700, "end", spacing=-0.5)}
+{text(W - M - 64, M + 122, "Open to full-time roles, internships and freelance projects.", 15, MUTED, 400, "end")}
+</g>
+{grain(M, M, CW, CH, 22)}'''
+    write("footer.svg", svg(W, H, "Thanks for stopping by. Open to full-time roles, internships and freelance projects.", body))
 
 
 if __name__ == "__main__":
     header()
-    for slug, label in [("about", "About"), ("stack", "Tech Stack"), ("projects", "Projects"),
-                        ("achievements", "Achievements"), ("activity", "Activity"), ("contact", "Contact")]:
-        title(slug, label)
+    for n, (slug, label) in enumerate([("about", "About"), ("stack", "Stack"), ("projects", "Selected work"),
+                                       ("achievements", "Recognition"), ("activity", "Activity"), ("contact", "Contact")], 1):
+        title(n, slug, label)
     for i, p in enumerate(PROJECTS):
-        card(*p, i)
+        card(i, *p)
     footer()
