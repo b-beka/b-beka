@@ -99,13 +99,13 @@ def header():
         f"Q{x + wave_w / 4:.0f} {-12 if (x // (wave_w // 2)) % 2 == 0 else 12} {x + wave_w / 2:.0f} 0"
         for x in range(0, 2400, wave_w // 2)) + " V300 H0 Z"
     name_style = f"font:300 {NS}px {SANS};letter-spacing:-3px"
-    fill = f'''<clipPath id="name"><text x="{NX}" y="{NY}" style="{name_style}">Bekzhan</text></clipPath>
+    fill = f'''<clipPath id="name"><text x="{NX}" y="{NY}" style="{name_style}">btlektes</text></clipPath>
 <g clip-path="url(#name)"><g>
   <animateTransform attributeName="transform" type="translate" values="0 {NY + 20};0 {NY + 20};0 {NY - NS - 30}"
     keyTimes="0;0.25;1" dur="3.4s" calcMode="spline" keySplines="0 0 1 1;0.45 0 0.25 1" fill="freeze"/>
   <path d="{wave}" fill="{ink}"><animateTransform attributeName="transform" type="translate" values="0 0;-{wave_w} 0" dur="1.6s" repeatCount="indefinite"/></path>
 </g></g>
-<text x="{NX}" y="{NY}" fill="none" stroke="{ink}" stroke-width="0.8" style="{name_style}">Bekzhan</text>'''
+<text x="{NX}" y="{NY}" fill="none" stroke="{ink}" stroke-width="0.8" style="{name_style}">btlektes</text>'''
 
     body = f'''{card_shell(M, M, CW, CH, 22)}
 <clipPath id="card"><rect x="{M}" y="{M}" width="{CW}" height="{CH}" rx="22"/></clipPath>
@@ -115,7 +115,7 @@ def header():
     <animate attributeName="opacity" values="0;1" dur="1.6s" fill="freeze"/>
   </image>
 </g>
-<g>{appear(0.1)}{text(NX + 4, M + 70, "FRONT-END DEVELOPER  /  WEB DESIGNER", 13, muted, 600, spacing=3)}</g>
+<g>{appear(0.1)}{text(NX + 4, M + 70, "BEKZHAN TLEKTES  /  FRONT-END DEVELOPER  /  WEB DESIGNER", 13, muted, 600, spacing=3)}</g>
 {fill}
 <path d="M{NX + 4} {NY + 46} H{NX + 560}" stroke="{ink}" stroke-width="1" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">{draw(1.6, 1.4)}</path>
 <g>{appear(2.4)}
@@ -126,7 +126,7 @@ def header():
 </g>
 <g>{appear(2.8)}{text(W - M - 40, H - M - 38, "2026", 13, faint, 500, "end", MONO, 2)}</g>
 {grain(M, M, CW, CH, 22)}'''
-    write("header.svg", svg(W, H, "Bekzhan, Front-End Developer and Web Designer, Aktobe, Kazakhstan", body))
+    write("header.svg", svg(W, H, "btlektes: Bekzhan Tlektes, Front-End Developer and Web Designer, Aktobe, Kazakhstan", body))
 
 
 # ---------------------------------------------------------------- section titles: "01  About  ————"
