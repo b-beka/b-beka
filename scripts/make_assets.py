@@ -87,6 +87,42 @@ def data_uri(name):
 BAYER = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]]
 
 
+# ---------------------------------------------------------------- name decode (text scramble)
+NOISE = "!<>-_/[]{}=+*^?#01アカサ"
+
+
+def decode_name(name, x, y, size, style, width, start, dur):
+    """The name is revealed left to right in letter-sized steps; just ahead of the edge a few
+    cells of random glyphs flicker, so it reads as text being decoded. Works with any font,
+    because the final name is a single normal text element."""
+    steps = len(name)
+    step_w = width / steps
+    keys = ";".join(f"{i / steps:.4f}" for i in range(steps + 1))
+    widths = ";".join(f"{i * step_w:.1f}" for i in range(steps + 1))
+    shifts = ";".join(f"{i * step_w:.1f} 0" for i in range(steps + 1))
+    timing = f'begin="{start}s" dur="{dur}s" calcMode="discrete" keyTimes="{keys}" fill="freeze"'
+    rnd = random.Random(8)
+    noise = []
+    for slot in range(3):
+        cx = x + step_w * (slot + 0.5)
+        glyphs = []
+        for k in range(3):
+            vals = ";".join("1" if j == k else "0" for j in range(3))
+            glyphs.append(f'<text x="{cx:.1f}" y="{y - size * 0.06:.1f}" text-anchor="middle" fill="{T["muted"]}" opacity="{1 if k == 0 else 0}" '
+                          f'style="font:400 {size * 0.62:.0f}px {MONO}">{escape(rnd.choice(NOISE))}'
+                          f'<animate attributeName="opacity" values="{vals}" dur="{0.18 + slot * 0.05:.2f}s" calcMode="discrete" repeatCount="indefinite"/></text>')
+        noise.append(f'<g opacity="{1 - slot * 0.3:.1f}">{"".join(glyphs)}</g>')
+    return f'''<clipPath id="reveal"><rect x="{x - 6}" y="{y - size}" height="{size * 1.35:.0f}" width="0">
+  <animate attributeName="width" values="{widths}" {timing}/></rect></clipPath>
+<text x="{x}" y="{y}" fill="{T["ink"]}" clip-path="url(#reveal)" style="{style}">{escape(name)}</text>
+<g opacity="0">
+  <set attributeName="opacity" to="1" begin="{start}s"/>
+  <animate attributeName="opacity" values="1;0" begin="{start + dur:.2f}s" dur="0.3s" fill="freeze"/>
+  <animateTransform attributeName="transform" type="translate" values="{shifts}" {timing}/>
+  {"".join(noise)}
+</g>'''
+
+
 # ---------------------------------------------------------------- header
 def header():
     W, H, M = 1280, 440, 16
@@ -94,18 +130,9 @@ def header():
     NX, NY, NS = M + 72, M + 188, 92
     ink, muted, faint = T["ink"], T["muted"], T["faint"]
 
-    wave_w = 240
-    wave = "M0 0 " + " ".join(
-        f"Q{x + wave_w / 4:.0f} {-12 if (x // (wave_w // 2)) % 2 == 0 else 12} {x + wave_w / 2:.0f} 0"
-        for x in range(0, 2400, wave_w // 2)) + " V300 H0 Z"
+    name = "Tlektes Bekzhan"
     name_style = f"font:300 {NS}px {SANS};letter-spacing:-3px"
-    fill = f'''<clipPath id="name"><text x="{NX}" y="{NY}" style="{name_style}">Tlektes Bekzhan</text></clipPath>
-<g clip-path="url(#name)"><g>
-  <animateTransform attributeName="transform" type="translate" values="0 {NY + 20};0 {NY + 20};0 {NY - NS - 30}"
-    keyTimes="0;0.25;1" dur="3.4s" calcMode="spline" keySplines="0 0 1 1;0.45 0 0.25 1" fill="freeze"/>
-  <path d="{wave}" fill="{ink}"><animateTransform attributeName="transform" type="translate" values="0 0;-{wave_w} 0" dur="1.6s" repeatCount="indefinite"/></path>
-</g></g>
-<text x="{NX}" y="{NY}" fill="none" stroke="{ink}" stroke-width="0.8" style="{name_style}">Tlektes Bekzhan</text>'''
+    fill = decode_name(name, NX, NY, NS, name_style, width=680, start=0.4, dur=2.2)
 
     body = f'''{card_shell(M, M, CW, CH, 22)}
 <clipPath id="card"><rect x="{M}" y="{M}" width="{CW}" height="{CH}" rx="22"/></clipPath>
@@ -172,6 +199,37 @@ def marquee():
             f'<g mask="url(#m)">{"".join(rows)}</g>')
     label = "Stack: " + ", ".join(i for items, _, _ in ROWS for i in items)
     write("stack.svg", svg(W, H, label, body, defs))
+
+
+# ---------------------------------------------------------------- skills orbit
+ORBITS = [
+    (70, ["React", "TypeScript", "Tailwind CSS"], 26),
+    (118, ["Next.js", "JavaScript", "Framer Motion", "Figma"], 38),
+    (162, ["Python", "FastAPI", "Node.js", "Docker", "Vite", "Git"], 54),
+]
+
+
+def orbit():
+    W, H, M = 1280, 420, 16
+    CW, CH = W - 2 * M, H - 2 * M - 8
+    cx, cy = W / 2, M + CH / 2
+    out = [card_shell(M, M, CW, CH, 22)]
+    for i, (r, items, dur) in enumerate(ORBITS):
+        rx, ry = r * 2.6, r * 0.78
+        out.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx:.0f}" ry="{ry:.0f}" fill="none" stroke="{T["line"]}" '
+                   f'pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">{draw(0.2 + i * 0.2, 1.6)}</ellipse>')
+        path = f"M{cx + rx:.0f} {cy} A{rx:.0f} {ry:.0f} 0 1 1 {cx - rx:.0f} {cy} A{rx:.0f} {ry:.0f} 0 1 1 {cx + rx:.0f} {cy}"
+        for k, it in enumerate(items):
+            w = len(it) * 8 + 26
+            out.append(f'<g><g>{appear(0.8 + i * 0.25 + k * 0.06, 0.6, 0)}'
+                       f'<rect x="{-w / 2:.0f}" y="-15" width="{w:.0f}" height="30" rx="15" fill="{T["paper"]}" stroke="{T["faint"]}"/>'
+                       f'{text(0, 5, it, 13, T["ink2"], 500, "middle", MONO)}</g>'
+                       f'<animateMotion dur="{dur}s" begin="-{dur * k / len(items):.2f}s" repeatCount="indefinite" path="{path}"/></g>')
+    out.append(f'<g>{appear(0.2, 0.8, 0)}<circle cx="{cx}" cy="{cy}" r="36" fill="{T["ink"]}"/>'
+               f'{text(cx, cy + 6, "TB", 17, T["paper"], 600, "middle")}</g>')
+    out.append(grain(M, M, CW, CH, 22))
+    label = "Core stack: " + ", ".join(i for _, items, _ in ORBITS for i in items)
+    write("orbit.svg", svg(W, H, label, "".join(out)))
 
 
 # ---------------------------------------------------------------- project cards
@@ -285,6 +343,7 @@ def main():
         for n, (slug, label) in enumerate([("about", "About"), ("stack", "Stack"), ("projects", "Selected work"),
                                            ("achievements", "Recognition"), ("activity", "Activity"), ("contact", "Contact")], 1):
             title(n, slug, label)
+        orbit()
         marquee()
         for i, p in enumerate(PROJECTS):
             card(i, *p)

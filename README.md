@@ -8,6 +8,8 @@ I design and build clean, fast and accessible interfaces, taking products from a
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/title-stack.svg"><img src="./assets/title-stack.svg" alt="02 Stack" width="100%"/></picture>
 
+<picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/orbit.svg"><img src="./assets/orbit.svg" alt="Core stack orbiting around the initials TB: React, TypeScript, Tailwind CSS, Next.js, JavaScript, Framer Motion, Figma, Python, FastAPI, Node.js, Docker, Vite, Git" width="100%"/></picture>
+
 <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/stack.svg"><img src="./assets/stack.svg" alt="Stack: TypeScript, JavaScript, React, Next.js, Tailwind CSS, Framer Motion, HTML, CSS, Python, FastAPI, Node.js, Docker, Vite, Vitest, Git, Figma, Photoshop" width="100%"/></picture>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/title-projects.svg"><img src="./assets/title-projects.svg" alt="03 Selected work" width="100%"/></picture>
@@ -29,6 +31,8 @@ I design and build clean, fast and accessible interfaces, taking products from a
 <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/title-activity.svg"><img src="./assets/title-activity.svg" alt="05 Activity" width="100%"/></picture>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/stats.svg"><img src="./assets/stats.svg" alt="GitHub activity: contributions, streaks, languages and contribution calendar" width="100%"/></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/activity.svg"><img src="./assets/activity.svg" alt="Weekly contributions over the last 12 months as a line graph" width="100%"/></picture>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/title-contact.svg"><img src="./assets/title-contact.svg" alt="06 Contact" width="100%"/></picture>
 

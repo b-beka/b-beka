@@ -1,4 +1,4 @@
-"""Render assets/stats.svg from the GitHub GraphQL API.
+"""Render assets/stats.svg and assets/activity.svg (plus dark/ variants) from the GitHub GraphQL API.
 
 Run by .github/workflows/stats.yml with GITHUB_TOKEN. Standard library only.
 """
@@ -199,12 +199,59 @@ def render(u):
     return "\n".join(o)
 
 
+def render_activity(u):
+    """Weekly contributions as a line graph that draws itself from left to right."""
+    weeks = u["contributionsCollection"]["contributionCalendar"]["weeks"]
+    weekly = [sum(d["contributionCount"] for d in w["contributionDays"]) for w in weeks]
+    starts = [dt.date.fromisoformat(w["contributionDays"][0]["date"]) for w in weeks]
+    peak = max(weekly) or 1
+    W, H, M, P = 1280, 330, 16, 56
+    CW, CH = W - 2 * M, H - 2 * M - 8
+    x0, x1, yb, yt = M + P + 24, W - M - P, M + 236, M + 76
+    n = max(1, len(weekly) - 1)
+    pts = [(x0 + i * (x1 - x0) / n, yb - v / peak * (yb - yt)) for i, v in enumerate(weekly)]
+    line = "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in pts)
+    area = line + f" L{x1} {yb} L{x0} {yb}Z"
+    o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" '
+         f'aria-label="Weekly contributions over the last 12 months, peak {peak} in a week">',
+         f'<defs><filter id="shadow" x="-10%" y="-20%" width="120%" height="150%"><feGaussianBlur stdDeviation="10"/></filter>'
+         '<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>'
+         f'<feColorMatrix values="{GRAIN}"/></filter>'
+         f'<clipPath id="draw"><rect x="{x0 - 6}" y="0" height="{H}" width="0"><animate attributeName="width" values="0;0;{x1 - x0 + 12}" '
+         'keyTimes="0;0.2;1" dur="2.8s" calcMode="spline" keySplines="0 0 1 1;0.4 0 0.2 1" fill="freeze"/></rect></clipPath></defs>',
+         f'<style>text{{font-family:{FONT}}}</style>',
+         f'<rect x="{M}" y="{M + 8}" width="{CW}" height="{CH}" rx="22" fill="#000" opacity="{SHADOW}" filter="url(#shadow)"/>',
+         f'<rect x="{M}" y="{M}" width="{CW}" height="{CH}" rx="22" fill="{PAPER}" stroke="{LINE}"/>',
+         f'<text x="{M + P}" y="{M + 46}" font-size="12" font-weight="600" letter-spacing="2.5" fill="{MUTED}">WEEKLY CONTRIBUTIONS</text>',
+         f'<text x="{W - M - P}" y="{M + 46}" text-anchor="end" font-size="12.5" fill="{FAINT}" font-family="{MONO}">peak {peak} / week</text>']
+    for k in range(4):
+        y = yb - k * (yb - yt) / 3
+        o.append(f'<path d="M{x0} {y:.1f} H{x1}" stroke="{LINE}"/>'
+                 f'<text x="{x0 - 14}" y="{y + 4:.1f}" text-anchor="end" font-size="11" fill="{FAINT}" font-family="{MONO}">{round(peak * k / 3)}</text>')
+    seen = set()
+    for i, d in enumerate(starts):
+        if d.day <= 7 and d.month not in seen:
+            seen.add(d.month)
+            o.append(f'<text x="{pts[i][0]:.1f}" y="{yb + 26}" text-anchor="middle" font-size="11.5" fill="{MUTED}">{d.strftime("%b")}</text>')
+    o.append(f'<g clip-path="url(#draw)"><path d="{area}" fill="{INK}" opacity="0.06"/>'
+             f'<path d="{line}" fill="none" stroke="{INK}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>')
+    for (x, y), v in zip(pts, weekly):
+        if v:
+            o.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.4" fill="{PAPER}" stroke="{INK}" stroke-width="1.6"><title>{v}</title></circle>')
+    o.append("</g>")
+    o.append(f'<rect x="{M}" y="{M}" width="{CW}" height="{CH}" rx="22" fill="#fff" filter="url(#grain)"/>')
+    o.append("</svg>")
+    return "\n".join(o)
+
+
 if __name__ == "__main__":
     user = fetch()
     for name, theme in THEMES.items():
         globals().update(theme)
-        path = os.path.join(ASSETS, name)
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, "w") as f:
-            f.write(render(user))
-        print("wrote", path)
+        outputs = {name: render(user), name.replace("stats.svg", "activity.svg"): render_activity(user)}
+        for out_name, content in outputs.items():
+            path = os.path.join(ASSETS, out_name)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w") as f:
+                f.write(content)
+            print("wrote", path)
