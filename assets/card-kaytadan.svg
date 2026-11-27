@@ -1,13 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 236" width="640" height="236" role="img" aria-label="Kaytadan: Offline-first flashcard app with spaced repetition. Installable as a PWA, data stays on the device."><defs>
-<filter id="grain" x="0" y="0" width="100%" height="100%">
-  <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
-  <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.022 0"/>
-</filter>
-<filter id="shadow" x="-10%" y="-20%" width="120%" height="150%"><feGaussianBlur stdDeviation="10"/></filter></defs><rect x="12" y="20" width="616" height="204" rx="18" fill="#000" opacity="0.06" filter="url(#shadow)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 236" width="640" height="236" role="img" aria-label="Kaytadan: Offline-first flashcard app with spaced repetition. Installable as a PWA, data stays on the device."><defs><filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.022 0"/></filter><filter id="shadow" x="-10%" y="-20%" width="120%" height="150%"><feGaussianBlur stdDeviation="10"/></filter></defs><rect x="12" y="20" width="616" height="204" rx="18" fill="#000" opacity="0.06" filter="url(#shadow)"/>
 <rect x="12" y="12" width="616" height="204" rx="18" fill="#ffffff"/>
 <rect x="12" y="12" width="616" height="204" rx="18" fill="none" stroke="#ebebeb"/>
-<rect x="12" y="12" width="616" height="204" rx="18" fill="none" stroke="#c9c9c9" stroke-width="1"
- pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"><animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.135;1" dur="1.85s" calcMode="spline" keySplines="0 0 1 1;0.4 0 0.2 1" fill="freeze"/>
+<rect x="12" y="12" width="616" height="204" rx="18" fill="none" stroke="#c9c9c9" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"><animate attributeName="stroke-dashoffset" values="1;1;0" keyTimes="0;0.135;1" dur="1.85s" calcMode="spline" keySplines="0 0 1 1;0.4 0 0.2 1" fill="freeze"/>
 <animate attributeName="stroke-opacity" values="1;1;0" keyTimes="0;0.6;1" begin="1.85s" dur="1.2s" fill="freeze"/></rect>
 <g><animate attributeName="opacity" values="0;0;1" keyTimes="0;0.391;1" dur="1.15s" fill="freeze"/><animateTransform attributeName="transform" type="translate" values="0 10;0 10;0 0" keyTimes="0;0.391;1" calcMode="spline" keySplines="0 0 1 1;0.2 0.8 0.2 1" dur="1.15s" fill="freeze"/>
 <text x="44" y="48" text-anchor="start" fill="#8a8a8a" style="font:500 12.5px 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;letter-spacing:1px">02</text>

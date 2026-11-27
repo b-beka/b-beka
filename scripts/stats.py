@@ -38,11 +38,22 @@ query($login: String!) {
 """
 
 # Palette taken from the profile banner: sky blue, cloud white and field green.
-# Black and white, matching the rest of the profile.
-INK, INK2, MUTED, FAINT = "#0f0f0f", "#3a3a3a", "#8a8a8a", "#c9c9c9"
-PAPER, LINE, TRACK = "#ffffff", "#ebebeb", "#f0f0f0"
-SHADES = ["#f0f0f0", "#cfcfcf", "#9a9a9a", "#5c5c5c", "#111111"]
-LANG_SHADES = ["#111111", "#444444", "#6e6e6e", "#959595", "#b9b9b9", "#d6d6d6"]
+# Black and white, matching the rest of the profile; one palette per GitHub theme.
+THEMES = {
+    "stats.svg": dict(
+        INK="#0f0f0f", INK2="#3a3a3a", MUTED="#8a8a8a", FAINT="#c9c9c9",
+        PAPER="#ffffff", LINE="#ebebeb", TRACK="#f0f0f0", SHADOW=0.06,
+        GRAIN="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.022 0",
+        SHADES=["#f0f0f0", "#cfcfcf", "#9a9a9a", "#5c5c5c", "#111111"],
+        LANG_SHADES=["#111111", "#444444", "#6e6e6e", "#959595", "#b9b9b9", "#d6d6d6"]),
+    "dark/stats.svg": dict(
+        INK="#f2f2f2", INK2="#cfcfcf", MUTED="#8a8a8a", FAINT="#4a4a4a",
+        PAPER="#0e0e0e", LINE="#232323", TRACK="#1c1c1c", SHADOW=0.5,
+        GRAIN="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.035 0",
+        SHADES=["#1c1c1c", "#3d3d3d", "#6e6e6e", "#a8a8a8", "#efefef"],
+        LANG_SHADES=["#efefef", "#bdbdbd", "#949494", "#6e6e6e", "#4f4f4f", "#383838"]),
+}
+globals().update(THEMES["stats.svg"])
 FONT = "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
 MONO = "'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace"
 
@@ -120,9 +131,9 @@ def render(u):
     o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="GitHub activity for {LOGIN}">',
          f'<defs><filter id="shadow" x="-10%" y="-20%" width="120%" height="150%"><feGaussianBlur stdDeviation="10"/></filter>'
          '<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>'
-         '<feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.022 0"/></filter></defs>',
+         f'<feColorMatrix values="{GRAIN}"/></filter></defs>',
          f'<style>text{{font-family:{FONT}}}</style>',
-         f'<rect x="{M}" y="{M + 8}" width="{CW}" height="{CH}" rx="22" fill="#000" opacity="0.06" filter="url(#shadow)"/>',
+         f'<rect x="{M}" y="{M + 8}" width="{CW}" height="{CH}" rx="22" fill="#000" opacity="{SHADOW}" filter="url(#shadow)"/>',
          f'<rect x="{M}" y="{M}" width="{CW}" height="{CH}" rx="22" fill="{PAPER}" stroke="{LINE}"/>',
          f'<rect x="{M}" y="{M}" width="{CW}" height="{CH}" rx="22" fill="none" stroke="{FAINT}" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">'
          '<animate attributeName="stroke-dashoffset" values="1;0" dur="1.6s" calcMode="spline" keySplines="0.4 0 0.2 1" fill="freeze"/>'
@@ -189,7 +200,11 @@ def render(u):
 
 
 if __name__ == "__main__":
-    path = os.path.join(ASSETS, "stats.svg")
-    with open(path, "w") as f:
-        f.write(render(fetch()))
-    print("wrote", path)
+    user = fetch()
+    for name, theme in THEMES.items():
+        globals().update(theme)
+        path = os.path.join(ASSETS, name)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w") as f:
+            f.write(render(user))
+        print("wrote", path)
