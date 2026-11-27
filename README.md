@@ -1,8 +1,8 @@
-<picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/header.svg"><img src="./assets/header.svg" alt="btlektes: Bekzhan Tlektes, Front-End Developer and Web Designer based in Aktobe, Kazakhstan" width="100%"/></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/header.svg"><img src="./assets/header.svg" alt="btlektes: Tlektes Bekzhan, Front-End Developer and Web Designer based in Aktobe, Kazakhstan" width="100%"/></picture>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/dark/title-about.svg"><img src="./assets/title-about.svg" alt="01 About" width="100%"/></picture>
 
-I am Bekzhan Tlektes, a front-end developer and web designer based in Aktobe, Kazakhstan, and a student at K. Zhubanov Aktobe Regional University.
+I am Tlektes Bekzhan, a front-end developer and web designer based in Aktobe, Kazakhstan, and a student at K. Zhubanov Aktobe Regional University.
 
 I design and build clean, fast and accessible interfaces, taking products from a Figma mockup to a production-ready React application. My recent work focuses on AI-powered education tools and offline-first web apps.
 

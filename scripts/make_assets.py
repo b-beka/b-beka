@@ -115,7 +115,7 @@ def header():
     <animate attributeName="opacity" values="0;1" dur="1.6s" fill="freeze"/>
   </image>
 </g>
-<g>{appear(0.1)}{text(NX + 4, M + 70, "BEKZHAN TLEKTES  /  FRONT-END DEVELOPER  /  WEB DESIGNER", 13, muted, 600, spacing=3)}</g>
+<g>{appear(0.1)}{text(NX + 4, M + 70, "TLEKTES BEKZHAN  /  FRONT-END DEVELOPER  /  WEB DESIGNER", 13, muted, 600, spacing=3)}</g>
 {fill}
 <path d="M{NX + 4} {NY + 46} H{NX + 560}" stroke="{ink}" stroke-width="1" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1">{draw(1.6, 1.4)}</path>
 <g>{appear(2.4)}
@@ -126,7 +126,7 @@ def header():
 </g>
 <g>{appear(2.8)}{text(W - M - 40, H - M - 38, "2026", 13, faint, 500, "end", MONO, 2)}</g>
 {grain(M, M, CW, CH, 22)}'''
-    write("header.svg", svg(W, H, "btlektes: Bekzhan Tlektes, Front-End Developer and Web Designer, Aktobe, Kazakhstan", body))
+    write("header.svg", svg(W, H, "btlektes: Tlektes Bekzhan, Front-End Developer and Web Designer, Aktobe, Kazakhstan", body))
 
 
 # ---------------------------------------------------------------- section titles: "01  About  ————"
